@@ -9,6 +9,10 @@ def disco_main(run=False):
         A new Client from the provided command line arguments
     """
 
+    from gevent import monkey
+
+    monkey.patch_all()
+
     from disco.client import Client, ClientConfig
     from disco.bot import Bot, BotConfig
     from disco.util.token import is_valid_token
