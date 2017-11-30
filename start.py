@@ -31,6 +31,8 @@ def disco_main(run=False):
     bot_config = BotConfig(config.bot)
 
     bot = Bot(client, bot_config)
+    from examples import Db
+    bot.db = Db()
 
     bot.run_forever()
     return bot
