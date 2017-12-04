@@ -1,3 +1,4 @@
 orator
 disco-py
 yamlcfg
+pymysql
