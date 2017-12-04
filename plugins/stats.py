@@ -34,14 +34,6 @@ class StatPlugin(Plugin):
                 # This is not best practice but we don't care about 'member' at all, so whatever
                 member = self.bot.client.api.guilds_members_get(guild, member)  # lookup member details
                 member_id = int(member.id)
-                # Check if we know the status of the member, and save it for later
-                if member_id in self.bot.client.state.users and not isinstance(self.bot.client.state.users[member_id].presence, Unset):
-                    member_presence = self.bot.client.state.users[member_id].presence
-                else:
-                    # Cache starts as empty - expect to see the error at least once per run
-                    print("Member {} not in state tracking - closing stats".format(member))
-                    self.bot.db.close_stats(member_id, '', now)
-                    continue
 
                 if set(member.roles).intersection([self.roles[x] for x in self.tracked_roles]) and \
                         not set(member.roles).intersection([self.roles[x] for x in self.excluded_roles]):
@@ -50,6 +42,15 @@ class StatPlugin(Plugin):
                         self.bot.db.create_member(member_id, str(member.name), now)
                 else:
                     # They are in the excluded list or not in the tracked list
+                    continue
+
+                # Check if we know the status of the member, and save it for later
+                if member_id in self.bot.client.state.users and not isinstance(self.bot.client.state.users[member_id].presence, Unset):
+                    member_presence = self.bot.client.state.users[member_id].presence
+                else:
+                    # Cache starts as empty - expect to see the error at least once per run
+                    print("Member {} not in state tracking - closing stats".format(member))
+                    self.bot.db.close_stats(member_id, '', now)
                     continue
 
                 if member_presence.status == user.Status.IDLE or not member_presence.game.name:

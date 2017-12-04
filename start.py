@@ -24,7 +24,7 @@ def disco_main(run=False):
         print('Invalid token passed')
         return
 
-    setup_logging(level='INFO')
+    setup_logging(level='WARN')
 
     client = Client(config)
 
