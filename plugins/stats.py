@@ -52,9 +52,9 @@ class StatPlugin(Plugin):
                     # They are in the excluded list or not in the tracked list
                     continue
 
-                if member_presence.status == user.Status.IDLE or not member_presence.game:
+                if member_presence.status == user.Status.IDLE or not member_presence.game.name:
                     # The user is AFK or they are not playing a game - close their entries
                     self.bot.db.close_stats(member_id, '', now)
-                elif member_presence.game:
+                elif member_presence.game.name:
                     # The user is active and playing a game
                     self.bot.db.create_stat(member_id, str(member_presence.game.name), now)
