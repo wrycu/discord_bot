@@ -1,6 +1,7 @@
 from disco.bot import Plugin
 from disco.api.http import Routes
 from disco.types import user
+from disco.types.base import Unset
 from datetime import datetime
 
 
@@ -34,7 +35,7 @@ class StatPlugin(Plugin):
                 member = self.bot.client.api.guilds_members_get(guild, member)  # lookup member details
                 member_id = int(member.id)
                 # Check if we know the status of the member, and save it for later
-                if member_id in self.bot.client.state.users:
+                if member_id in self.bot.client.state.users and not isinstance(self.bot.client.state.users[member_id].presence, Unset):
                     member_presence = self.bot.client.state.users[member_id].presence
                 else:
                     # Cache starts as empty - expect to see the error at least once per run
