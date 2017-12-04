@@ -191,6 +191,7 @@ class ChartingDao:
         :param user_id:
             ID of the user you want to close stats for
         :param game_name:
+            TODO: make game_name an optional parameter
             Name of the game being played (and, as a result, to exclude)
         :param end_time:
             Datetime at which the game was finished being played
@@ -198,7 +199,10 @@ class ChartingDao:
         :return:
             N/A
         """
-        game_id = Game.where('name', '=', game_name).first().id
+        if game_name == '':
+            game_id = -1
+        else:
+            game_id = Game.where('name', '=', game_name).first().id
         stat_ids = [x[1] for x in self.get_stats(user_id)]  # We only care about the entry ID, not the game ID
 
         Statistic.where(
